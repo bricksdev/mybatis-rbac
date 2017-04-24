@@ -11,15 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.easymock.internal.MocksControl;
-import org.easymock.internal.MocksControl.MockType;
-import static org.testng.Assert.*;
+import org.apache.ibatis.session.SqlSessionManager;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -71,7 +64,8 @@ public class DynamicRbacInterceptorNGTest {
         try {
             
             inputStream = Resources.getResourceAsStream("cn/com/bricks/mybatis/test/MapperConfig.xml");
-            SqlSessionFactory sqlSession = new SqlSessionFactoryBuilder().build(inputStream);
+            SqlSessionManager sqlSession = SqlSessionManager.newInstance(inputStream);
+            
             int count = sqlSession.openSession().selectOne("org.apache.ibatis.domain.blog.mappers.BlogMapper.selectCountOfPosts");
             System.out.println(count);
         } catch (IOException ex) {
